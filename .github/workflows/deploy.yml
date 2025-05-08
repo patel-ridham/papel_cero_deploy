@@ -16,7 +16,7 @@ jobs:
         command_timeout: 30m
         script: |
           set -e 
-          whoami
+          mkdir test
           # cd backend-monorepo
           # git checkout deployment
           # git pull origin deployment
