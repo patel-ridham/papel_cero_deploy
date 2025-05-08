@@ -16,10 +16,10 @@ jobs:
         command_timeout: 30m
         script: |
           set -e 
-          mkdir test
-          # cd backend-monorepo
-          # git checkout deployment
-          # git pull origin deployment
-          # sudo docker-compose down
-          # sudo docker-compose up -d --build
-          # sudo docker image prune -f
+          cd /var/www/html/python/ocr-ai
+          git checkout add-ocr-admin
+          git pull origin add-ocr-admin
+          uv sync
+          cd /var/www/html/python/ocr-ai/ocr-expediente
+          pm2 restart 0
+          sudo systemctl restart nginx
