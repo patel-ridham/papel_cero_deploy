@@ -1,0 +1,32 @@
+name: Deploy Tag to Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag to deploy'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd /path/to/your/project
+            git fetch --all --tags
+
+            # Check if the tag exists
+            if ! git rev-parse "refs/tags/${{ github.event.inputs.tag }}" >/dev/null 2>&1; then
+              echo "❌ Error: Tag '${{ github.event.inputs.tag }}' does not exist!"
+              exit 1
+            fi
+
+            git checkout tags/${{ github.event.inputs.tag }}
+            sudo systemctl restart nginx
